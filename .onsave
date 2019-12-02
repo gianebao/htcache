@@ -1,0 +1,9 @@
+#!/usr/bin bash
+
+if hash godocdown 2>/dev/null; then
+    DIR=$(dirname "$0")
+    cd "$DIR"
+    godocdown > readme.md
+else
+    date "Need to install godocdown in [${cwd}]"
+fi

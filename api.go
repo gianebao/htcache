@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -24,10 +25,10 @@ type Request struct {
 
 var (
 	// HTTPClient defines the http client to be used when doing an HTTP request
-	HTTPClient   = &http.Client{}
-	
+	HTTPClient = &http.Client{}
+
 	// Verbose indicates if logs will be shown
-	Verbose      = false
+	Verbose = false
 )
 
 func verbose(m string) {

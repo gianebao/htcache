@@ -5,6 +5,16 @@
 
 ## Usage
 
+```go
+var (
+	// HTTPClient defines the http client to be used when doing an HTTP request
+	HTTPClient = &http.Client{}
+
+	// Verbose indicates if logs will be shown
+	Verbose = false
+)
+```
+
 #### type Request
 
 ```go

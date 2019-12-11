@@ -22,6 +22,20 @@ type Request struct {
 	FromCache bool
 }
 
+var (
+	// HTTPClient defines the http client to be used when doing an HTTP request
+	HTTPClient   = &http.Client{}
+	
+	// Verbose indicates if logs will be shown
+	Verbose      = false
+)
+
+func verbose(m string) {
+	if Verbose {
+		log.Println(m)
+	}
+}
+
 // Exec executes the API and check cache
 func (a *Request) Exec(body string) ([]byte, error) {
 	return a.ExecWithContext(context.Background(), body)
@@ -32,15 +46,16 @@ func (a *Request) ExecWithContext(ctx context.Context, body string) ([]byte, err
 	res, err := a.execFromMemory(ctx, body)
 
 	if a.FromCache = len(res) > 0 && err == nil; a.FromCache {
+		verbose("cache hit: " + a.GetID(body))
 		return res, err
 	}
 
+	verbose("cache miss: " + a.GetID(body))
 	return a.execHTTPWithContext(ctx, body)
 }
 
 func (a Request) execHTTPWithContext(ctx context.Context, body string) ([]byte, error) {
 	var (
-		client   = &http.Client{}
 		req, err = http.NewRequestWithContext(ctx, a.Method, a.URL, strings.NewReader(body))
 		res      *http.Response
 	)
@@ -53,7 +68,7 @@ func (a Request) execHTTPWithContext(ctx context.Context, body string) ([]byte, 
 		req.Header.Add(i, v)
 	}
 
-	res, err = client.Do(req)
+	res, err = HTTPClient.Do(req)
 
 	if err != nil {
 		return []byte{}, err
